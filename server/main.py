@@ -17,12 +17,12 @@ origins = ["http://192.168.0.100:8000"]
 app.add_middleware(CORSMiddleware, allow_origins=origins)
 
 # ---- QRCode ----
-qr = qrcode.QRCode()
-qr.add_data("http://192.168.0.107:8000/client/controller.html")
-f = io.StringIO()
-qr.print_ascii(out=f)
-f.seek(0)
-print(f.read())
+# qr = qrcode.QRCode()
+# qr.add_data("http://192.168.0.107:8000/client/controller.html")
+# f = io.StringIO()
+# qr.print_ascii(out=f)
+# f.seek(0)
+# print(f.read())
 
 
 @app.get("/")

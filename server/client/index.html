@@ -5,11 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="./jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
     <title>Quest</title>
   </head>
-  <body class="h-screen w-full">
-    <div class="h-screen w-full bg-[url(./assets/landscape_city.png)] bg-cover bg-center]">
-      <div><img id="player" class="w-[33px] h-[48px] absolute top-[50vh] left-[50vw]" src="./assets/sprites/front_stand.png" alt=""></div>
+  <body class="h-screen w-full bg-black font-[Pixelify_Sans]">
+    <div id="screen" class="h-screen w-full bg-[url(./assets/landscape_city.png)] bg-cover bg-center]">
+    <!-- <div id="screen" class="h-screen w-full bg-[url(./assets/buildings_sprites/cafe.png)] bg-size-[800px] bg-center bg-no-repeat"> -->
+    <!-- <div id="screen" class="h-screen w-full bg-[url(./assets/buildings_sprites/shop.png)] bg-size-[800px] bg-center bg-no-repeat"> -->
+      <div>
+        <p id="name_tag" class="text-white absolute top-[47vh] left-[50vw]">Player</p>
+        <img id="player" class="w-[33px] h-[48px] absolute top-[50vh] left-[50vw]" src="./assets/player_sprites/front_stand.png" alt="">
+      </div>
     </div>
 
     <script>
@@ -22,36 +30,73 @@
       const position = player.position()
       console.log(position)
 
+      const name = $("#name_tag")
+
       prev_x = position.left
       prev_y = position.top
 
+      prev_name_x = name.position().left
+      prev_name_y = name.position().top
+
       if(e.which == 119) {
         state = state ? 0 : 1
-        player.attr("src", `./assets/sprites/back_walk_${state + 1}.png`)
+        player.attr("src", `./assets/player_sprites/back_walk_${state + 1}.png`)
         player.css("width", "33")
         player.css("height", "44px")
         player.css("top", `${prev_y-20}px`)
+        name.css("top", `${prev_name_y-20}px`)
       }
       if(e.which == 115) {
         state = state ? 0 : 1
-        player.attr("src", `./assets/sprites/front_walk_${state + 1}.png`)
+        player.attr("src", `./assets/player_sprites/front_walk_${state + 1}.png`)
         player.css("width", "33px")
         player.css("height", "48px")
         player.css("top", `${prev_y+20}px`)
+        name.css("top", `${prev_name_y+20}px`)
       }
       if(e.which == 97) {
         state = state ? 0 : 1
-        player.attr("src", `./assets/sprites/left_walk_${state + 1}.png`)
+        player.attr("src", `./assets/player_sprites/left_walk_${state + 1}.png`)
         player.css("width", "42px")
         player.css("height", "42px")
         player.css("left", `${prev_x-20}px`)
+        name.css("left", `${prev_name_x-20}px`)
       }
       if(e.which == 100) {
         state = state ? 0 : 1
-        player.attr("src", `./assets/sprites/right_walk_${state + 1}.png`)
+        player.attr("src", `./assets/player_sprites/right_walk_${state + 1}.png`)
         player.css("width", "42px")
         player.css("height", "42px")
         player.css("left", `${prev_x+20}px`)
+        name.css("left", `${prev_name_x+20}px`)
+      }
+
+      // ---- CAFE ----
+      if(e.which == 107 && ((position.top >= 99 && position.left >= 277) && (position.top <= 299 && position.left <= 537)))  {
+        $("#screen").css({
+          "background-image": "url(./assets/buildings_sprites/cafe.png)",
+          "background-size": "800px",
+          "background-position": "center",
+          "background-repeat": "no-repeat"
+        })
+        player.css("top", "50vh")
+        player.css("left", "50vw")
+        name.css("top", "47vh")
+        name.css("left", "50vw")
+      }
+
+      // ---- SHOP ----
+      if(e.which == 107 && ((position.top >= 719 && position.left >= 1217) && (position.top <= 759 && position.left <= 1437)))  {
+        $("#screen").css({
+          "background-image": "url(./assets/buildings_sprites/shop.png)",
+          "background-size": "800px",
+          "background-position": "center",
+          "background-repeat": "no-repeat"
+        })
+        player.css("top", "50vh")
+        player.css("left", "50vw")
+        name.css("top", "47vh")
+        name.css("left", "50vw")
       }
     })
     </script>

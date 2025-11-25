@@ -26,32 +26,32 @@
       prev_y = position.top
 
       if(e.which == 119) {
-        player.css("top", `${prev_y-20}px`)
         state = state ? 0 : 1
         player.attr("src", `./assets/sprites/back_walk_${state + 1}.png`)
         player.css("width", "33")
         player.css("height", "44px")
+        player.css("top", `${prev_y-20}px`)
       }
       if(e.which == 115) {
-        player.css("top", `${prev_y+20}px`)
         state = state ? 0 : 1
         player.attr("src", `./assets/sprites/front_walk_${state + 1}.png`)
         player.css("width", "33px")
         player.css("height", "48px")
+        player.css("top", `${prev_y+20}px`)
       }
       if(e.which == 97) {
-        player.css("left", `${prev_x-20}px`)
         state = state ? 0 : 1
         player.attr("src", `./assets/sprites/left_walk_${state + 1}.png`)
         player.css("width", "42px")
         player.css("height", "42px")
+        player.css("left", `${prev_x-20}px`)
       }
       if(e.which == 100) {
-        player.css("left", `${prev_x+20}px`)
         state = state ? 0 : 1
         player.attr("src", `./assets/sprites/right_walk_${state + 1}.png`)
         player.css("width", "42px")
         player.css("height", "42px")
+        player.css("left", `${prev_x+20}px`)
       }
     })
     </script>

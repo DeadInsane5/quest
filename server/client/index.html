@@ -11,10 +11,16 @@
     <title>Quest</title>
   </head>
   <body class="h-screen w-full bg-black font-[Pixelify_Sans]">
-    <div id="screen" class="h-screen w-full bg-[url(./assets/landscape_city.png)] bg-cover bg-center]">
+    <div id="screen" class="h-screen w-full bg-[url(./assets/city.png)] bg-cover bg-center]">
     <!-- <div id="screen" class="h-screen w-full bg-[url(./assets/buildings_sprites/cafe.png)] bg-size-[800px] bg-center bg-no-repeat"> -->
     <!-- <div id="screen" class="h-screen w-full bg-[url(./assets/buildings_sprites/shop.png)] bg-size-[800px] bg-center bg-no-repeat"> -->
       <div>
+        <img id="cafe-dialogue-intro" class="hidden w-[260px] h-[52px] absolute top-[24vh] left-[48vw]" src="./assets/dialogues/cafe_intro.gif" alt="">
+        <img id="cafe-dialogue-outro" class="hidden w-[200px] h-[64px] absolute top-[24vh] left-[48vw]" src="./assets/dialogues/cafe_outro.gif" alt="">
+
+        <img id="shop-dialogue-intro" class="hidden w-[240px] h-[64px] absolute top-[22vh] left-[36vw]" src="./assets/dialogues/shop_intro.gif" alt="">
+        <img id="shop-dialogue-outro" class="hidden w-[240px] h-[84] absolute top-[17vh] left-[36vw]" src="./assets/dialogues/shop_outro.gif" alt="">
+
         <p id="name_tag" class="text-white absolute top-[47vh] left-[50vw]">Player</p>
         <img id="player" class="w-[33px] h-[48px] absolute top-[50vh] left-[50vw]" src="./assets/player_sprites/front_stand.png" alt="">
       </div>
@@ -22,6 +28,9 @@
 
     <script>
     state = 0
+    screen = "city"
+    // screen = "cafe"
+    // screen = "shop"
 
     $("body").on("keypress", (e) => {
       console.log(e.which)
@@ -72,7 +81,7 @@
       }
 
       // ---- CAFE ----
-      if(e.which == 107 && ((position.top >= 99 && position.left >= 277) && (position.top <= 299 && position.left <= 537)))  {
+      if(e.which == 107 && screen == "city" && ((position.top >= 99 && position.left >= 277) && (position.top <= 319 && position.left <= 537)))  {
         $("#screen").css({
           "background-image": "url(./assets/buildings_sprites/cafe.png)",
           "background-size": "800px",
@@ -83,10 +92,18 @@
         player.css("left", "50vw")
         name.css("top", "47vh")
         name.css("left", "50vw")
+
+        screen = "cafe"
+      }
+
+      // ---- cafe dialogue ----
+      if(e.which == 107 && screen == "cafe") {
+        console.log(screen)
+        $("#cafe-dialogue-intro").css("display", "inline")
       }
 
       // ---- SHOP ----
-      if(e.which == 107 && ((position.top >= 719 && position.left >= 1217) && (position.top <= 759 && position.left <= 1437)))  {
+      if(e.which == 107 && screen == "city" && ((position.top >= 699 && position.left >= 1217) && (position.top <= 759 && position.left <= 1437)))  {
         $("#screen").css({
           "background-image": "url(./assets/buildings_sprites/shop.png)",
           "background-size": "800px",
@@ -97,6 +114,14 @@
         player.css("left", "50vw")
         name.css("top", "47vh")
         name.css("left", "50vw")
+
+        screen = "shop"
+      }
+
+      // ---- shop dialogue ----
+      if(e.which == 107 && screen == "shop") {
+        console.log(screen)
+        $("#shop-dialogue-intro").css("display", "inline")
       }
     })
     </script>

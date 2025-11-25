@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Quest</title>
+  </head>
+  <body class="h-screen w-full">
+    <div class="h-screen w-full bg-[url(./assets/landscape_city.png)] bg-cover bg-center]">
+      <div><img id="player" class="w-[33px] h-[48px] absolute top-[50vh] left-[50vw]" src="./assets/sprites/front_stand.png" alt=""></div>
+    </div>
+
+    <script>
+    state = 0
+
+    $("body").on("keypress", (e) => {
+      console.log(e.which)
+
+      const player = $("#player")
+      const position = player.position()
+      console.log(position)
+
+      prev_x = position.left
+      prev_y = position.top
+
+      if(e.which == 119) {
+        player.css("top", `${prev_y-20}px`)
+        state = state ? 0 : 1
+        player.attr("src", `./assets/sprites/back_walk_${state + 1}.png`)
+        player.css("width", "26px")
+        player.css("width", "33px")
+      }
+      if(e.which == 115) {
+        player.css("top", `${prev_y+20}px`)
+        state = state ? 0 : 1
+        player.attr("src", `./assets/sprites/front_walk_${state + 1}.png`)
+        player.css("width", "33px")
+        player.css("height", "48px")
+      }
+      if(e.which == 97) {
+        player.css("left", `${prev_x-20}px`)
+        state = state ? 0 : 1
+        player.attr("src", `./assets/sprites/left_walk_${state + 1}.png`)
+        player.css("width", "42px")
+        player.css("width", "42px")
+      }
+      if(e.which == 100) {
+        player.css("left", `${prev_x+20}px`)
+        state = state ? 0 : 1
+        player.attr("src", `./assets/sprites/right_walk_${state + 1}.png`)
+        player.css("width", "42px")
+        player.css("width", "42px")
+      }
+    })
+    </script>
+  </body>
+</html>

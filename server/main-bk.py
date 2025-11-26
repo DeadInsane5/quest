@@ -6,32 +6,6 @@ from pynput.keyboard import Controller
 import time
 import io
 import qrcode
-import socket
-import platform
-
-
-# ---- Helper Functions ----
-def get_local_ip():
-    """Get the local IP address of the machine"""
-    try:
-        # Create a socket connection to determine the local IP
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # Connect to an external address (doesn't actually send data)
-        s.connect(("8.8.8.8", 80))
-        local_ip = s.getsockname()[0]
-        s.close()
-        return local_ip
-    except Exception:
-        # Fallback method
-        hostname = socket.gethostname()
-        local_ip = socket.gethostbyname(hostname)
-        return local_ip
-
-
-def get_network_prefix(ip_address):
-    """Get the network prefix for CORS (e.g., 192.168.0.*)"""
-    parts = ip_address.split(".")
-    return f"{parts[0]}.{parts[1]}.{parts[2]}"
 
 
 # ---- Player Class ----
@@ -45,58 +19,29 @@ class Player(BaseModel):
 keyboard = Controller()
 app = FastAPI()
 app.mount("/client", StaticFiles(directory="client"), name="client")
-
-# Get local IP address
-LOCAL_IP = get_local_ip()
-NETWORK_PREFIX = get_network_prefix(LOCAL_IP)
-PORT = 8000
-
-print(f"🖥️  System: {platform.system()}")
-print(f"📡 Local IP: {LOCAL_IP}")
-print(f"🌐 Network: {NETWORK_PREFIX}.0/24")
-
-# Allow all IPs on the local network
-origins = [
-    "http://localhost:8000",
-    f"http://{LOCAL_IP}:8000",
-]
-
-# Add all possible IPs in the local network (192.168.0.1 to 192.168.0.254)
-for i in range(1, 255):
-    origins.append(f"http://{NETWORK_PREFIX}.{i}:8000")
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
+origins = ["http://localhost:8000"]
+# origins = ["http://192.168.0.100:8000"]
+app.add_middleware(CORSMiddleware, allow_origins=origins)
 # ---- QRCode ----
 qr = qrcode.QRCode()
-controller_url = f"http://{LOCAL_IP}:{PORT}/client/controller.html"
-qr.add_data(controller_url)
+qr.add_data("http://192.168.0.107:8000/client/controller.html")
 f = io.StringIO()
 qr.print_ascii(out=f)
 f.seek(0)
-
-print("\n" + "=" * 50)
-print("📱 SCAN THIS QR CODE TO CONNECT:")
-print("=" * 50)
 print(f.read())
-print("=" * 50)
-print(f"🔗 Direct URL: {controller_url}")
-print("=" * 50 + "\n")
-
-current_player = None
 
 
 @app.get("/")
 def root():
-    return {"message": "server running", "ip": LOCAL_IP, "url": controller_url}
+    return {"message": "server running"}
 
 
+# @app.post("/api/gamepad/{button_id}")
+# async def handle_press(button_id):
+#     # keyboard.press(button_id)
+#     # time.sleep(0.5)
+#     # keyboard.release(button_id)
+#     return {"event": f"{button_id} pressed"}
 @app.get("/api/profile")
 async def get_profile():
     if current_player is None:

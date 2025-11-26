@@ -11,117 +11,41 @@
     <title>Quest</title>
   </head>
   <body class="h-screen w-full bg-black font-[Pixelify_Sans]">
-    <div id="screen" class="h-screen w-full bg-[url(./assets/city.png)] bg-cover bg-center]">
-    <!-- <div id="screen" class="h-screen w-full bg-[url(./assets/buildings_sprites/cafe.png)] bg-size-[800px] bg-center bg-no-repeat"> -->
-    <!-- <div id="screen" class="h-screen w-full bg-[url(./assets/buildings_sprites/shop.png)] bg-size-[800px] bg-center bg-no-repeat"> -->
-      <div>
-        <img id="cafe-dialogue-intro" class="hidden w-[260px] h-[52px] absolute top-[24vh] left-[48vw]" src="./assets/dialogues/cafe_intro.gif" alt="">
-        <img id="cafe-dialogue-outro" class="hidden w-[200px] h-[64px] absolute top-[24vh] left-[48vw]" src="./assets/dialogues/cafe_outro.gif" alt="">
-
-        <img id="shop-dialogue-intro" class="hidden w-[240px] h-[64px] absolute top-[22vh] left-[36vw]" src="./assets/dialogues/shop_intro.gif" alt="">
-        <img id="shop-dialogue-outro" class="hidden w-[240px] h-[84] absolute top-[17vh] left-[36vw]" src="./assets/dialogues/shop_outro.gif" alt="">
-
-        <p id="name_tag" class="text-white absolute top-[47vh] left-[50vw]">Player</p>
-        <img id="player" class="w-[33px] h-[48px] absolute top-[50vh] left-[50vw]" src="./assets/player_sprites/front_stand.png" alt="">
-      </div>
+    <div id="screen" class="relative h-screen w-full bg-gradient-to-b from-white from-0% via-[#ed53c4] via-46% to-[#ed53c4]">
+      <img id="player-model" class="h-screen absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" src="./assets/player_sprites/player_model_removebg.png" alt="">
+      <img id="input-prompt" class="absolute bottom-28 left-1/2 transform -translate-x-1/2 -translate-y-1/2" src="./assets/backgrounds/input_prompt.png" alt="">
+      <img id="input-name" class="absolute bottom-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2" src="./assets/backgrounds/input_name.png" alt="">
+      <input id="input" class="h-[80px] w-[780px] absolute bottom-4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-5xl font-bold text-center" type="text">
     </div>
 
     <script>
-    state = 0
-    screen = "city"
-    // screen = "cafe"
-    // screen = "shop"
+    screen = "start"
+    url = "http://localhost:8000/api/profile/create_profile"
 
-    $("body").on("keypress", (e) => {
+    $("body").on("keypress", async (e) => {
       console.log(e.which)
 
-      const player = $("#player")
-      const position = player.position()
-      console.log(position)
+      if(e.which == 13) {
+        const name = $("#input").val().trim()
 
-      const name = $("#name_tag")
-
-      prev_x = position.left
-      prev_y = position.top
-
-      prev_name_x = name.position().left
-      prev_name_y = name.position().top
-
-      if(e.which == 119) {
-        state = state ? 0 : 1
-        player.attr("src", `./assets/player_sprites/back_walk_${state + 1}.png`)
-        player.css("width", "33")
-        player.css("height", "44px")
-        player.css("top", `${prev_y-20}px`)
-        name.css("top", `${prev_name_y-20}px`)
-      }
-      if(e.which == 115) {
-        state = state ? 0 : 1
-        player.attr("src", `./assets/player_sprites/front_walk_${state + 1}.png`)
-        player.css("width", "33px")
-        player.css("height", "48px")
-        player.css("top", `${prev_y+20}px`)
-        name.css("top", `${prev_name_y+20}px`)
-      }
-      if(e.which == 97) {
-        state = state ? 0 : 1
-        player.attr("src", `./assets/player_sprites/left_walk_${state + 1}.png`)
-        player.css("width", "42px")
-        player.css("height", "42px")
-        player.css("left", `${prev_x-20}px`)
-        name.css("left", `${prev_name_x-20}px`)
-      }
-      if(e.which == 100) {
-        state = state ? 0 : 1
-        player.attr("src", `./assets/player_sprites/right_walk_${state + 1}.png`)
-        player.css("width", "42px")
-        player.css("height", "42px")
-        player.css("left", `${prev_x+20}px`)
-        name.css("left", `${prev_name_x+20}px`)
-      }
-
-      // ---- CAFE ----
-      if(e.which == 107 && screen == "city" && ((position.top >= 99 && position.left >= 277) && (position.top <= 319 && position.left <= 537)))  {
-        $("#screen").css({
-          "background-image": "url(./assets/buildings_sprites/cafe.png)",
-          "background-size": "800px",
-          "background-position": "center",
-          "background-repeat": "no-repeat"
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({"name": name})
         })
-        player.css("top", "50vh")
-        player.css("left", "50vw")
-        name.css("top", "47vh")
-        name.css("left", "50vw")
 
-        screen = "cafe"
-      }
+        const data = await response.json()
 
-      // ---- cafe dialogue ----
-      if(e.which == 107 && screen == "cafe") {
-        console.log(screen)
-        $("#cafe-dialogue-intro").css("display", "inline")
-      }
+        console.log(data)
 
-      // ---- SHOP ----
-      if(e.which == 107 && screen == "city" && ((position.top >= 699 && position.left >= 1217) && (position.top <= 759 && position.left <= 1437)))  {
-        $("#screen").css({
-          "background-image": "url(./assets/buildings_sprites/shop.png)",
-          "background-size": "800px",
-          "background-position": "center",
-          "background-repeat": "no-repeat"
-        })
-        player.css("top", "50vh")
-        player.css("left", "50vw")
-        name.css("top", "47vh")
-        name.css("left", "50vw")
-
-        screen = "shop"
-      }
-
-      // ---- shop dialogue ----
-      if(e.which == 107 && screen == "shop") {
-        console.log(screen)
-        $("#shop-dialogue-intro").css("display", "inline")
+        if(name) {
+          window.open("./city.html", "_self")
+        }
+        else {
+          alert("Please enter your name")
+        }
       }
     })
     </script>

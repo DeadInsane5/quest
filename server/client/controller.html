@@ -54,7 +54,8 @@
     //   console.log(response)
     // })
 
-    const wsURI = "ws://192.168.0.107:8000/ws/gamepad"
+    // const wsURI = "ws://192.168.0.107:8000/ws/gamepad"
+    const wsURI = "ws://localhost:8000/ws/gamepad"
     const socket = new WebSocket(wsURI)
 
     socket.addEventListener("open", () => {

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <title>Quest</title>
+  </head>
+  <body class="h-screen w-full bg-black font-[Pixelify_Sans]">
+    <div id="screen" class="h-screen w-full bg-[url(./assets/buildings_sprites/cafe.png)] bg-size-[800px] bg-center bg-no-repeat">
+      <div>
+        <img id="cafe-dialogue-intro" class="hidden w-[260px] h-[52px] absolute top-[24vh] left-[48vw]" src="./assets/dialogues/cafe_intro.gif" alt="">
+        <img id="cafe-dialogue-outro" class="hidden w-[200px] h-[64px] absolute top-[24vh] left-[48vw]" src="./assets/dialogues/cafe_outro.gif" alt="">
+
+        <img id="shop-dialogue-intro" class="hidden w-[240px] h-[64px] absolute top-[22vh] left-[36vw]" src="./assets/dialogues/shop_intro.gif" alt="">
+        <img id="shop-dialogue-outro" class="hidden w-[240px] h-[84] absolute top-[17vh] left-[36vw]" src="./assets/dialogues/shop_outro.gif" alt="">
+
+        <p id="name_tag" class="text-white absolute top-[47vh] left-[50vw]">Player</p>
+        <img id="player" class="w-[33px] h-[48px] absolute top-[50vh] left-[50vw]" src="./assets/player_sprites/front_stand.png" alt="">
+      </div>
+    </div>
+
+    <script>
+    state = 0
+    screen = "cafe"
+
+    url = "http://localhost:8000/api/profile"
+
+    async function get_profile() {
+      const response = await fetch(url)
+      const data = await response.json()
+      console.log(data)
+
+      $("#name_tag").text(data.name)
+    }
+    get_profile()
+
+    $("body").on("keypress", (e) => {
+      console.log(e.which)
+
+      const player = $("#player")
+      const position = player.position()
+      console.log(position)
+
+      const name = $("#name_tag")
+
+      prev_x = position.left
+      prev_y = position.top
+
+      prev_name_x = name.position().left
+      prev_name_y = name.position().top
+
+      if(e.which == 119) {
+        state = state ? 0 : 1
+        player.attr("src", `./assets/player_sprites/back_walk_${state + 1}.png`)
+        player.css("width", "33")
+        player.css("height", "44px")
+        player.css("top", `${prev_y-20}px`)
+        name.css("top", `${prev_name_y-20}px`)
+      }
+      if(e.which == 115) {
+        state = state ? 0 : 1
+        player.attr("src", `./assets/player_sprites/front_walk_${state + 1}.png`)
+        player.css("width", "33px")
+        player.css("height", "48px")
+        player.css("top", `${prev_y+20}px`)
+        name.css("top", `${prev_name_y+20}px`)
+      }
+      if(e.which == 97) {
+        state = state ? 0 : 1
+        player.attr("src", `./assets/player_sprites/left_walk_${state + 1}.png`)
+        player.css("width", "42px")
+        player.css("height", "42px")
+        player.css("left", `${prev_x-20}px`)
+        name.css("left", `${prev_name_x-20}px`)
+      }
+      if(e.which == 100) {
+        state = state ? 0 : 1
+        player.attr("src", `./assets/player_sprites/right_walk_${state + 1}.png`)
+        player.css("width", "42px")
+        player.css("height", "42px")
+        player.css("left", `${prev_x+20}px`)
+        name.css("left", `${prev_name_x+20}px`)
+      }
+
+      // ---- cafe dialogue ----
+      if(e.which == 107 && screen == "cafe") {
+        console.log(screen)
+        $("#cafe-dialogue-intro").css("display", "inline")
+      }
+    })
+    </script>
+  </body>
+</html>
+
+

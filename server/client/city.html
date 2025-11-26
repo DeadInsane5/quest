@@ -23,6 +23,7 @@
 
         <p id="name_tag" class="text-white absolute top-[47vh] left-[50vw]">Player</p>
         <img id="player" class="w-[33px] h-[48px] absolute top-[50vh] left-[50vw]" src="./assets/player_sprites/front_stand.png" alt="">
+        <img id="certificate" class="hidden w-[1000px] h-[500] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" src="./assets/utilities/certificate.png" alt="">
       </div>
     </div>
 
@@ -43,6 +44,10 @@
       // console.log(data)
 
       $("#name_tag").text(data.name)
+
+      if(data.energy >= 100 && data.stress <= 0 && data.happiness >= 100) {
+        $("#certificate").css("display", "inline")
+      }
 
       return data
     }
